@@ -17,13 +17,14 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import include, path
 from rest_framework import routers
-
+from django.conf.urls.static import static
+from django.conf import settings
 
 router = routers.DefaultRouter()
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('video/', include('compression.urls')),
+    path('', include('compression.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
