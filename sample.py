@@ -16,7 +16,7 @@ class PlayCamera(object):
         while True:
             (self.grabbed, self.frame) = self.video.read()  
 
-def gen(camera,p):
+def gen(camera):
     try:
          while True:
             frame = camera.get_frame()
