@@ -33,11 +33,11 @@ command1 = ['ffmpeg',
         '-segment_times', '5',
         '-f', 'rtsp',
         'rtsp://65.1.134.231:8554/mystream1',
-        '-start_number','0',
-        '-hls_time','1',
-        '-hls_list_size','0',
-        '-f','hls',
-        r'C:\Users\Kaamil\Documents\enturf-compression\media\cam1\hsl.m3u8'
+        # '-start_number','0',
+        # '-hls_time','1',
+        # '-hls_list_size','0',
+        # '-f','hls',
+        # r'C:\Users\Kaamil\Documents\enturf-compression\media\cam1\hsl.m3u8'
         ]
 
 command2 = ['ffmpeg',
@@ -61,11 +61,11 @@ command2 = ['ffmpeg',
         '-segment_times', '5',
         '-f', 'rtsp',
         'rtsp://localhost:8554/mystream2',
-        '-start_number','0',
-        '-hls_time','1',
-        '-hls_list_size','0',
-        '-f','hls',
-        r'C:\Users\Kaamil\Documents\enturf-compression\media\cam2\hsl'
+        # '-start_number','0',
+        # '-hls_time','1',
+        # '-hls_list_size','0',
+        # '-f','hls',
+        # r'C:\Users\Kaamil\Documents\enturf-compression\media\cam2\hsl'
         ]
 
 p1 = subprocess.Popen(command1, stdin=subprocess.PIPE)
