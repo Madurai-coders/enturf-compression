@@ -35,7 +35,7 @@ def cam1_start():
     cam = PlayCamera(value)
     gen(cam)
 
-
+cam1_start()
 
 
 
