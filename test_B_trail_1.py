@@ -1,11 +1,8 @@
 import subprocess
 import cv2
 import threading
-from ffmpeg_streaming import Formats, Bitrate, Representation, Size
 import numpy as np
 import imutils
-import ffmpeg_streaming
-import time
 import multiprocessing
 
 fps = 30
@@ -32,7 +29,7 @@ command1 = ['ffmpeg',
         '-rtsp_transport', 'tcp',
         '-segment_times', '5',
         '-f', 'rtsp',
-        'rtsp://65.1.134.231:8554/mystream1',
+        'rtsp://65.1.134.231:8554/mystream',
         # '-start_number','0',
         # '-hls_time','1',
         # '-hls_list_size','0',
@@ -40,33 +37,33 @@ command1 = ['ffmpeg',
         # r'C:\Users\Kaamil\Documents\enturf-compression\media\cam1\hsl.m3u8'
         ]
 
-command2 = ['ffmpeg',
-        '-y',
-        '-re',
-        '-f', 'rawvideo',
-        '-vcodec', 'rawvideo',
-        '-pix_fmt', 'bgr24',
-        '-s', "{}x{}".format(width, height),
-        '-r', str(fps),
-        '-i', '-',
-        '-pix_fmt', 'yuv420p',
-        '-r', '30',
-        '-g', '50',
-        '-c:v', 'libx264',
-        '-b:v', '2M',
-        '-bufsize', '64M',
-        '-maxrate', "4M",
-        '-preset', 'veryfast',
-        '-rtsp_transport', 'tcp',
-        '-segment_times', '5',
-        '-f', 'rtsp',
-        'rtsp://localhost:8554/mystream2',
-        # '-start_number','0',
-        # '-hls_time','1',
-        # '-hls_list_size','0',
-        # '-f','hls',
-        # r'C:\Users\Kaamil\Documents\enturf-compression\media\cam2\hsl'
-        ]
+# command2 = ['ffmpeg',
+#         '-y',
+#         '-re',
+#         '-f', 'rawvideo',
+#         '-vcodec', 'rawvideo',
+#         '-pix_fmt', 'bgr24',
+#         '-s', "{}x{}".format(width, height),
+#         '-r', str(fps),
+#         '-i', '-',
+#         '-pix_fmt', 'yuv420p',
+#         '-r', '30',
+#         '-g', '50',
+#         '-c:v', 'libx264',
+#         '-b:v', '2M',
+#         '-bufsize', '64M',
+#         '-maxrate', "4M",
+#         '-preset', 'veryfast',
+#         '-rtsp_transport', 'tcp',
+#         '-segment_times', '5',
+#         '-f', 'rtsp',
+#         'rtsp://localhost:8554/mystream2',
+#         # '-start_number','0',
+#         # '-hls_time','1',
+#         # '-hls_list_size','0',
+#         # '-f','hls',
+#         # r'C:\Users\Kaamil\Documents\enturf-compression\media\cam2\hsl'
+#         ]
 
 p1 = subprocess.Popen(command1, stdin=subprocess.PIPE)
 # p2 = subprocess.Popen(command2, stdin=subprocess.PIPE)
