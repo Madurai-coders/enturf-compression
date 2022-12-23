@@ -85,7 +85,6 @@ class PlayCamera(object):
             (self.grabbed, self.frame) = self.video.read()  
 
 def gen(camera,p):
-    try:
          greenLower = (29, 86, 6)
          greenUpper = (64, 255, 255)
         #  greenLower = (0, 166, 0)
@@ -141,8 +140,7 @@ def gen(camera,p):
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
             
-    except:  
-        print('completed')
+
             
 def cam1_start():
     value=cv2.VideoCapture('rtsp://admin:user@123@49.207.177.194:10554/Streaming/Channels/101')
