@@ -32,7 +32,7 @@ command1 = ['ffmpeg',
         '-rtsp_transport', 'tcp',
         '-segment_times', '5',
         '-f', 'rtsp',
-        'rtsp://localhost:8554/mystream1',
+        'rtsp://65.1.134.231:8554/mystream1',
         '-start_number','0',
         '-hls_time','1',
         '-hls_list_size','0',
@@ -95,6 +95,7 @@ def gen(camera,p):
         #  greenUpper = (25, 255, 255)
          while True:
             frame = camera.get_frame()
+
             frame = imutils.resize(frame, width=600)
 
             blurred = cv2.GaussianBlur(frame, (11, 11), 0)
