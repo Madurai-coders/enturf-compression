@@ -20,8 +20,7 @@ def gen(camera,p):
     try:
          while True:
             frame = camera.get_frame()
-
-           
+            print('processing')
             cv2.imshow("circles", frame)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
