@@ -138,7 +138,7 @@ def gen(camera,p):
     
             resize=cv2.resize(cropped_image,(400,800))
 
-            cv2.imshow("circles", resize)
+            # cv2.imshow("circles", resize)
 
             p.stdin.write(resize.tobytes())
             if cv2.waitKey(1) & 0xFF == ord('q'):
