@@ -65,7 +65,7 @@ command1 = ['ffmpeg',
 #         # r'C:\Users\Kaamil\Documents\enturf-compression\media\cam2\hsl'
 #         ]
 
-p1 = subprocess.Popen(command1, stdin=subprocess.PIPE)
+p = subprocess.Popen(command1, stdin=subprocess.PIPE)
 # p2 = subprocess.Popen(command2, stdin=subprocess.PIPE)
 
 
@@ -145,7 +145,7 @@ def gen(camera,p):
 def cam1_start():
     value=cv2.VideoCapture('rtsp://admin:user@123@49.207.177.194:10554/Streaming/Channels/101')
     cam = PlayCamera(value)
-    gen(cam,p1)
+    gen(cam,p)
 
 
 # def cam2_start():
