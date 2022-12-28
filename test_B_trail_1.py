@@ -34,7 +34,7 @@ command1 = ['ffmpeg',
         '-hls_time','1',
         '-hls_list_size','0',
         '-f','hls',
-        r'\home\ec2-user\enturf-compression\media\cam1\hsl.m3u8'
+        'media/cam1/hsl.m3u8'
         ]
 
 # command2 = ['ffmpeg',
