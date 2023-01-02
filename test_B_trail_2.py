@@ -1,19 +1,37 @@
 import subprocess
 import cv2
 import threading
-from ffmpeg_streaming import Formats, Bitrate, Representation, Size
 import numpy as np
 import imutils
-import ffmpeg_streaming
-import time
 import multiprocessing
+import mediapipe as mp
+import time
 
 
+import websocket
+import _thread
+import time
+import rel
+import json
+
+def on_message(ws, message):
+    print(message)
+    res = json.loads(message)
+    print(res["type"])
+
+def on_error(ws, error):
+    print(error)
+
+def on_close(ws, close_status_code, close_msg):
+    print("### closed ###")
+
+def on_open(ws):
+    print("Opened connection")
+
+    
 class PlayCamera(object):
     def __init__(self,value):
         self.video = value
-        fps = self.video.get(cv2.CAP_PROP_FPS)
-        print(fps)
         (self.grabbed, self.frame) = self.video.read()
         threading.Thread(target=self.update, args=()).start()
     def __del__(self):
@@ -23,72 +41,83 @@ class PlayCamera(object):
         return image
     def update(self):
         while True:
-            (self.grabbed, self.frame) = self.video.read()
-            cv2.waitKey(100)
-  
-
-
+            (self.grabbed, self.frame) = self.video.read()  
 
 def gen(camera):
-    try:
-         greenLower = (0, 166, 0)
-         greenUpper = (25, 255, 255)
+         websocket.enableTrace(True)
+         ws = websocket.WebSocketApp("ws://65.1.134.231:8001/ws/iot/",
+                              on_open=on_open,
+                              on_message=on_message,
+                              on_error=on_error,
+                              on_close=on_close)
+         ws.run_forever(dispatcher=rel, reconnect=5)  # Set dispatcher to automatic reconnection, 5 second reconnect delay if connection closed unexpectedly
+        #  rel.signal(2, rel.abort)  # Keyboard Interrupt
+         mpHands = mp.solutions.hands
+         hands = mpHands.Hands()
+         mpDraw = mp.solutions.drawing_utils
+         pTime = 0
+         cTime = 0
+         id4=[]
+         id8=[]
          while True:
-            frame = camera.get_frame()
-            frame = imutils.resize(frame, width=600)
+            img = camera.get_frame()
 
-            blurred = cv2.GaussianBlur(frame, (11, 11), 0)
-            hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
+            imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            results = hands.process(imgRGB)
+ 
+            if results.multi_hand_landmarks:
+                for handLms in results.multi_hand_landmarks:
+                    for id, lm in enumerate(handLms.landmark):
+                        # print(id, lm)
+                        h, w, c = img.shape
+                        cx, cy = int(lm.x * w), int(lm.y * h)
+                        if id == 4:
+                            # print(id, cx, cy)
+                            cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
+                            id4=[id, cx, cy]
+                        if id == 8:
+                            # print(id, cx, cy)
+                            cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
+                            id8=[id, cx, cy]
 
-            mask = cv2.inRange(hsv, greenLower, greenUpper)
-            mask = cv2.erode(mask, None, iterations=2)
-            mask = cv2.dilate(mask, None, iterations=2)
+                            # if id4[1]-id8[1] < 10  and id4[2]-id8[2] < 10:
+                            #     count = count+1
+                            #     print(count)
+                            #     if count > 50:
+                            #         print('hi')
+                            #         count = 0
+                            
+                                
+                            # ws.send("Hello, World")
 
-            cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
-                                    cv2.CHAIN_APPROX_SIMPLE)
-            cnts = imutils.grab_contours(cnts)
-            center = None
-
-            if len(cnts) > 0:
-
-                c = max(cnts, key=cv2.contourArea)
-                ((x, y), radius) = cv2.minEnclosingCircle(c)
-                M = cv2.moments(c)
-                center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
-
-                if radius > 5:
-
-                    cv2.circle(frame, (int(x), int(y)), int(radius),
-                            (0, 255, 255), 0.1)
-                    cv2.circle(frame, center, 5, (0, 0, 255), -1)
-
-            if center:
-                start_val=center[0]-100
-                End_val=center[0]+100
-                if start_val<0:
-                    End_val=End_val-start_val
-                    start_val=0
-                if End_val>600:
-                    start_val=start_val-End_val
-                    End_val=600
-                cropped_image=frame[0:,start_val:End_val]
-            else:
-                cropped_image=frame[0:,200:400]
-    
-            resize=cv2.resize(cropped_image,(400,800))
-
-            cv2.imshow("circles", resize)
+  
+                    mpDraw.draw_landmarks(img, handLms, mpHands.HAND_CONNECTIONS)
+ 
+            cTime = time.time()
+            fps = 1 / (cTime - pTime)
+            pTime = cTime
+ 
+            cv2.imshow("circles", img)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
-            
-    except:   
-        print('completed')
-
-
+                      
 def cam1_start():
-    value=cv2.VideoCapture('static/sample1.mp4')
+    value=cv2.VideoCapture(0)
     cam = PlayCamera(value)
     gen(cam)
+    
 
-cam1_start()
+
+if __name__ == "__main__":
+    p1 = multiprocessing.Process(target=cam1_start, args=())
+    p1.start()
+
+
+
+
+
+
+
+  
+
