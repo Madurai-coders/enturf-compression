@@ -4,6 +4,8 @@ import threading
 import numpy as np
 import imutils
 import multiprocessing
+import os, shutil
+
 
 fps = 30
 width = 400
@@ -19,9 +21,10 @@ command1 = ['ffmpeg',
         '-r', str(fps),
         '-i', '-',
         '-pix_fmt', 'yuv420p',
-        '-r', '30',
+        # '-r', '30',
         '-g', '50',
-        '-c:v', 'libx264',
+        '-crf', '21',
+        '-c:v', 'libx264',      
         '-b:v', '2M',
         '-bufsize', '64M',
         '-maxrate', "4M",
@@ -30,11 +33,21 @@ command1 = ['ffmpeg',
         # '-segment_times', '5',
         # '-f', 'rtsp',
         # 'rtsp://65.1.134.231:8554/mystream',
+        '-sc_threshold', '0',
         '-start_number','0',
-        '-hls_time','1',
+        '-hls_time','6',
         '-hls_list_size','0',
-        '-f','hls',
+        # '-hls_flags', 'delete_segments',
+        # '-hls_flags' ,'+append_list',
+        # '-hls_flags' ,'+discont_start',
+        '-hls_flags', '+program_date_time',
+        '-hls_playlist_type', 'event',
+        # '-hls_flags', 'single_file',
+        # '-f','hls',
+        # '-segment_list_flags', '+live',
+        # '-segment_wrap', '6',
         'media/cam1/hsl.m3u8'
+        #  r'C:\Users\Kaamil\Documents\enturf-compression\media\cam1\hsl.m3u8'
         ]
 
 # command2 = ['ffmpeg',
@@ -134,7 +147,6 @@ def gen(camera,p):
     
             resize=cv2.resize(cropped_image,(400,800))
 
-            # cv2.imshow("circles", resize)
 
             p.stdin.write(resize.tobytes())
             if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -143,6 +155,17 @@ def gen(camera,p):
 
             
 def cam1_start():
+    folder = 'media/cam1/'
+    for filename in os.listdir(folder):
+        file_path = os.path.join(folder, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print('Failed to delete %s. Reason: %s' % (file_path, e))
+
     value=cv2.VideoCapture('rtsp://admin:user@123@49.207.177.194:10554/Streaming/Channels/101')
     cam = PlayCamera(value)
     gen(cam,p)

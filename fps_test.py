@@ -4,7 +4,7 @@ import time
 if __name__ == '__main__' :
  
     # Start default camera
-    video = cv2.VideoCapture('rtsp://admin:user@123@49.207.177.194:10554/Streaming/Channels/101')
+    video = cv2.VideoCapture('rtsp://admin:user@123@192.168.0.110:10554/Streaming/Channels/101')
  
     # Find OpenCV version
     (major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
