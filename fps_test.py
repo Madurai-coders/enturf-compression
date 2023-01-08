@@ -4,7 +4,7 @@ import time
 if __name__ == '__main__' :
  
     # Start default camera
-    video = cv2.VideoCapture('rtsp://192.168.0.111:8080/h264_pcm.sdp')
+    video = cv2.VideoCapture('rtsp://49.207.177.194:8011/h264_ulaw.sdp')
  
     # Find OpenCV version
     (major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
