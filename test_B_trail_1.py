@@ -46,8 +46,8 @@ command1 = ['ffmpeg',
         # '-f','hls',
         # '-segment_list_flags', '+live',
         # '-segment_wrap', '6',
-        'media/cam1/hsl.m3u8'
-        #  r'C:\Users\Kaamil\Documents\enturf-compression\media\cam1\hsl.m3u8'
+        # 'media/cam1/hsl.m3u8'
+         r'C:\Users\Kaamil\Documents\enturf-compression\media\cam1\hsl.m3u8'
         ]
 
 # command2 = ['ffmpeg',
@@ -166,7 +166,8 @@ def cam1_start():
         except Exception as e:
             print('Failed to delete %s. Reason: %s' % (file_path, e))
 
-    value=cv2.VideoCapture('rtsp://admin:user@123@49.207.177.194:10554/Streaming/Channels/101')
+    # value=cv2.VideoCapture('rtsp://admin:user@123@49.207.177.194:10554/Streaming/Channels/101')
+    value=cv2.VideoCapture('rtsp://192.168.0.111:8080/h264_pcm.sdp')
     cam = PlayCamera(value)
     gen(cam,p)
 
