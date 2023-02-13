@@ -166,8 +166,8 @@ def cam1_start():
         except Exception as e:
             print('Failed to delete %s. Reason: %s' % (file_path, e))
 
-    # value=cv2.VideoCapture('rtsp://admin:user@123@49.207.177.194:10554/Streaming/Channels/101')
-    value=cv2.VideoCapture('rtsp://192.168.0.111:8080/h264_pcm.sdp')
+    value=cv2.VideoCapture('rtsp://admin:user@123@49.207.177.194:10554/Streaming/Channels/101')
+    # value=cv2.VideoCapture('rtsp://49.207.177.194:8011/h264_ulaw.sdp')
     cam = PlayCamera(value)
     gen(cam,p)
 
